@@ -10,9 +10,14 @@ function App() {
 
   const { inputToDo, toDo } = state;
 
+  const focusInput = () => {
+    inputElement.current.focus();
+  };
+
   const handleAddToDo = () => {
     inputToDo && dispatch(actions.addToDoInput(inputToDo));
     dispatch(actions.setToDoInput(""));
+    focusInput();
   };
 
   const handleDeleteToDo = (index) => {
@@ -20,12 +25,14 @@ function App() {
   };
 
   const key = useRef();
+  const inputElement = useRef();
 
   const handleEditToDo = (index) => {
     key.current = index;
     setShowUpdate(true);
     setShowAdd(false);
     dispatch(actions.setToDoInput(toDo[index]));
+    focusInput();
   };
 
   const handleUpdateToDo = () => {
@@ -33,6 +40,7 @@ function App() {
     setShowAdd(true);
     inputToDo && dispatch(actions.editToDoInput(key.current, inputToDo));
     dispatch(actions.setToDoInput(""));
+    focusInput();
   };
 
   const handleDeleteAllToDo = () => {
@@ -42,6 +50,7 @@ function App() {
   return (
     <div style={{ padding: 50 }}>
       <input
+        ref={inputElement}
         placeholder="Enter todo..."
         value={inputToDo}
         onChange={(e) => {
